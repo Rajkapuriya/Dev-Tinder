@@ -22,7 +22,7 @@ const userAuth = async (req, res, next) => {
     if (!_id) {
 
     }
-    const user = await User.findById(_id)
+    const user = await User.findById(_id).select("+password");
     if (!user) {
       throw new Error("User not found")
     }

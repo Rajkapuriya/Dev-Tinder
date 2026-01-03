@@ -1,10 +1,10 @@
 const express = require("express")
 
-const router = express.Router()
+const authRouter = express.Router()
 const { validateSignUpData } = require('../utils/validation')
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
-router.post("/signup", async (req, res) => {
+authRouter.post("/signup", async (req, res) => {
     try {
         // Validation of data
         validateSignUpData(req);
@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
     try {
         const { emailId, password } = req.body;
 
@@ -41,7 +41,6 @@ router.post("/login", async (req, res) => {
         const isPasswordValid = await user.validatePassword(password);
         if (isPasswordValid) {
             const token = await user.getJWT()
-            console.log("Token", token)
             res.cookie("token", token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
             res.send("Login Successful!");
         } else {
@@ -51,7 +50,14 @@ router.post("/login", async (req, res) => {
         res.status(400).send("ERROR : " + err.message);
     }
 });
+authRouter.post("/logout", async (req, res) => {
+    try {
+        res.clearCookie("token")
+        res.send("Logout Successful!");
+    } catch (err) {
+        res.status(400).send("ERROR : " + err.message);
+    }
+});
 
 
-
-module.exports = router
+module.exports = authRouter

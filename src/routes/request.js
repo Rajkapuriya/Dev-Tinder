@@ -8,4 +8,4 @@ requestRouter.get("/sendConnectionRequest", (req, res) => {
 
 })
 
-module.exports = requestRouterdd
+module.exports = requestRouter
