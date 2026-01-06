@@ -23,6 +23,7 @@ const userAuth = async (req, res, next) => {
 
     }
     const user = await User.findById(_id).select("+password");
+    console.log("User Data" + user)
     if (!user) {
       throw new Error("User not found")
     }
